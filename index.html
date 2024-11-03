@@ -7,6 +7,53 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css"> <!-- Tautan ke file CSS terpisah -->
+    <style>
+        /* Gaya untuk form pendaftaran */
+        .form-container {
+            background: rgba(0, 0, 0, 0.8); /* Transparan */
+            border: 1px solid #00ff00; /* Garis hijau */
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            margin: 0 auto;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999; /* Supaya di atas elemen lainnya */
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #00ff00; /* Border hijau */
+            background-color: rgba(0, 0, 0, 0.5); /* Transparan */
+            color: #00ff00; /* Teks hijau */
+            outline: none; /* Tanpa outline */
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #00ff00; /* Tombol hijau */
+            color: black;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #005500; /* Warna tombol saat hover */
+        }
+
+        #countdown {
+            color: #00ff00;
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -15,9 +62,100 @@
             <a href="#">About</a>
             <a href="#">Products</a>
             <a href="#">Contact</a>
-            <a href="#">Log-In</a>
+            <a href="#" id="ageVerificationButton">Log-In</a>
         </nav>
     </header>
+    
+    <div id="countdown" class="hidden"></div>
+    
+    <div class="form-container hidden" id="registrationForm">
+        <h2>Pendaftaran</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="text" id="domain" placeholder="Domain (Harus Aktif)" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="password" id="confirmPassword" placeholder="Verifikasi Password" required>
+        <select id="gender" required>
+            <option value="">Pilih Jenis Kelamin</option>
+            <option value="male">Pria</option>
+            <option value="female">Wanita</option>
+            <option value="other">Lainnya</option>
+        </select>
+        <select id="country" required>
+            <option value="">Pilih Negara</option>
+            <!-- Tambahkan semua negara di sini -->
+            <option value="ID">Indonesia</option>
+            <option value="US">Amerika Serikat</option>
+            <option value="JP">Jepang</option>
+            <!-- Tambahkan lebih banyak negara sesuai kebutuhan -->
+        </select>
+        <button onclick="submitRegistration()">Daftar</button>
+        <button onclick="verifyPassword()">Verifikasi Password</button>
+    </div>
+
     <div class="footer-text">© Futuristic Website 2k22. All rights reserved.</div>
+
+    <script>
+        let countdownValue = 60; // 1 menit
+        let verificationAttempts = 0;
+
+        document.getElementById("ageVerificationButton").onclick = function() {
+            startAgeVerification();
+        };
+
+        function startAgeVerification() {
+            document.getElementById("countdown").innerText = countdownValue;
+            document.getElementById("ageVerificationButton").disabled = true;
+
+            const countdownInterval = setInterval(() => {
+                countdownValue--;
+                document.getElementById("countdown").innerText = countdownValue;
+                if (countdownValue <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById("ageVerificationButton").classList.add("hidden");
+                    askSecurityQuestion();
+                }
+            }, 1000);
+        }
+
+        function askSecurityQuestion() {
+            const question = prompt("Jawab pertanyaan keamanan: Apa warna langit?");
+            if (question && question.toLowerCase() === "biru") {
+                verificationAttempts++;
+                if (verificationAttempts < 5) {
+                    document.getElementById("registrationForm").classList.remove("hidden");
+                } else {
+                    alert("Terlalu banyak upaya. Silakan mulai ulang.");
+                    location.reload();
+                }
+            } else {
+                alert("Jawaban salah. Kembali ke menunggu.");
+                startAgeVerification(); // Kembali ke penghitung waktu
+            }
+        }
+
+        function submitRegistration() {
+            const username = document.getElementById("username").value;
+            const domain = document.getElementById("domain").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const gender = document.getElementById("gender").value;
+            const country = document.getElementById("country").value;
+
+            // Cek kesesuaian password
+            if (password !== confirmPassword) {
+                alert("Password tidak cocok. Silakan coba lagi.");
+                return;
+            }
+
+            // Cek domain dan lakukan pendaftaran
+            alert("Pendaftaran berhasil! Username: " + username + ", Domain: " + domain);
+            // Implementasikan verifikasi domain dan logika pendaftaran lainnya
+        }
+
+        function verifyPassword() {
+            // Implementasikan verifikasi password
+            alert("Verifikasi password berhasil!");
+        }
+    </script>
 </body>
 </html>
