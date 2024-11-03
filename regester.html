@@ -17,113 +17,94 @@
             background-size: cover; 
         }
 
-        .register-container {
+        .container {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 90%; /* Lebar form 90% untuk responsif */
-            max-width: 300px; /* Lebar maksimum form */
-            background: rgba(255, 255, 255, 0); /* Latar belakang transparan */
-            backdrop-filter: blur(10px); /* Efek blur untuk transparansi */
-            border-radius: 10px; /* Sudut melengkung */
-            padding: 30px; /* Ruang dalam */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Bayangan */
+            width: 90%; 
+            max-width: 400px; 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px); 
+            border-radius: 10px; 
+            padding: 30px; 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); 
         }
 
-        .register-container h2 {
+        h2 {
             margin-bottom: 15px;
             font-family: 'Poppins', sans-serif;
-            color: white; /* Warna teks putih */
-            font-size: 24px; /* Ukuran font lebih besar untuk desktop */
+            color: white; 
+            font-size: 24px; 
         }
 
-        .register-container label {
-            color: white; /* Warna label putih */
-            font-size: 16px; /* Ukuran font label */
-            margin-top: 10px; /* Jarak atas label */
+        label {
+            color: white; 
+            font-size: 16px; 
+            margin-top: 10px; 
         }
 
-        .register-container input {
+        input {
             margin: 5px 0;
-            padding: 10px; /* Padding lebih besar untuk kenyamanan pengguna */
-            border: 1px solid rgba(255, 255, 255, 0.8); /* Border putih transparan */
+            padding: 10px; 
+            border: 1px solid rgba(255, 255, 255, 0.8); 
             border-radius: 5px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.1); /* Latar belakang input transparan */
-            color: white; /* Warna teks input putih */
+            background: rgba(255, 255, 255, 0.2); 
+            color: white; 
         }
 
-        .register-container button {
+        button {
             margin-top: 10px;
-            padding: 10px; /* Padding tombol lebih besar */
-            background-color: #ff69b4; /* Warna latar belakang tombol */
+            padding: 10px; 
+            background-color: #ff69b4; 
             border: none;
             border-radius: 5px;
-            color: white; /* Warna teks tombol putih */
+            color: white; 
             cursor: pointer;
             width: 100%;
-            font-size: 16px; /* Ukuran font tombol */
-        }
-        
-        .register-container button:hover {
-            background-color: #ff1493; /* Warna latar belakang tombol saat hover */
+            font-size: 16px; 
         }
 
-        .register-container p {
+        button:hover {
+            background-color: #ff1493; 
+        }
+
+        p {
             margin-top: 10px;
-            color: white; /* Warna teks paragraf putih */
+            color: white; 
         }
 
-        .register-container a {
-            color: #ff69b4; /* Warna tautan */
-            text-decoration: none;
-        }
-
-        .register-container a:hover {
-            text-decoration: underline;
-        }
-
-        .math-question {
-            color: white; /* Warna pertanyaan pendidikan */
-            margin: 10px 0; /* Jarak vertikal untuk pertanyaan pendidikan */
-        }
-
-        .timer {
-            color: white; /* Warna timer */
-            margin: 5px 0; /* Jarak vertikal untuk timer */
+        #registrationForm {
+            display: none; 
         }
     </style>
 </head>
 <body>
-    <div class="register-container">
-        <h2>Verifikasi Usia</h2>
-        <p>Anda harus berusia 18 tahun ke atas untuk mendaftar.</p>
-        <button onclick="showRegistration()">Saya Berusia 18+</button>
+    <div class="container">
+        <h2>Verifikasi Umur</h2>
+        <form id="ageVerificationForm">
+            <label for="age">Masukkan umur Anda:</label>
+            <input type="number" id="age" name="age" required>
+            <button type="submit">Verifikasi</button>
+        </form>
 
-        <div id="registrationForm" style="display: none;">
+        <div id="registrationForm">
             <h2>Pendaftaran</h2>
             <form id="registerForm">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
-
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
-
                 <div id="mathQuestion" class="math-question"></div>
                 <input type="text" id="mathAnswer" placeholder="Jawab pertanyaan di atas" required>
-                <div id="timer" class="timer"></div>
-
                 <button type="submit">Daftar</button>
+                <p id="domainCheck" style="display: none; color: green;">✔️ Domain valid!</p>
+                <p id="verificationCodePrompt" style="display: none;">Masukkan kode verifikasi yang telah dikirim ke email Anda:</p>
+                <input type="text" id="verificationCode" placeholder="Kode Verifikasi" style="display: none;">
+                <button id="verifyButton" style="display: none;">Verifikasi Kode</button>
+                <p>Sudah punya akun? <a href="login.html">Login sekarang</a></p>
             </form>
-            <p id="domainCheck" style="display: none; color: green;">✔️ Domain valid!</p>
-            <p id="verificationCodePrompt" style="display: none;">Masukkan kode verifikasi yang telah dikirim ke email Anda:</p>
-            <input type="text" id="verificationCode" placeholder="Kode Verifikasi" style="display: none;">
-            <button id="verifyButton" style="display: none;">Verifikasi Kode</button>
-            <p>Sudah punya akun? <a href="login.html">Login sekarang</a></p>
         </div>
     </div>
 
@@ -131,26 +112,30 @@
         const questions = [
             { question: "Jika x + 5 = 12, berapa nilai x?", answer: "7" },
             { question: "Hitunglah nilai dari 2x - 3 = 5. Berapa nilai x?", answer: "4" },
-            { question: "Jika x^2 - 16 = 0, berapa nilai x?", answer: "4,-4" }, // Menyediakan dua jawaban
+            { question: "Jika x^2 - 16 = 0, berapa nilai x?", answer: "4,-4" },
             { question: "Hitunglah 3/4 + 5/8.", answer: "1.25" },
             { question: "Sebuah segitiga memiliki panjang sisi 5 cm, 12 cm, dan 13 cm. Apakah segitiga ini adalah segitiga siku-siku?", answer: "Ya" }
         ];
 
         let currentQuestion;
         let timer;
-        let timeLeft = 120; // 2 menit untuk menjawab
-        let questionAttempts = 0; // Jumlah percobaan pertanyaan
+        let timeLeft = 120;
+        let questionAttempts = 0;
+
+        document.getElementById('ageVerificationForm').onsubmit = function(event) {
+            event.preventDefault();
+            const age = parseInt(document.getElementById('age').value);
+            if (age >= 18) {
+                document.getElementById('registrationForm').style.display = 'block';
+                displayMathQuestion();
+            } else {
+                alert("Anda harus berusia 18 tahun atau lebih untuk mendaftar.");
+            }
+        };
 
         function getRandomQuestion() {
             const randomIndex = Math.floor(Math.random() * questions.length);
             return questions[randomIndex];
-        }
-
-        function showRegistration() {
-            document.querySelector('.register-container p').style.display = 'none';
-            document.getElementById('registrationForm').style.display = 'block';
-            document.getElementById('domainCheck').style.display = 'none';
-            displayMathQuestion();
         }
 
         function displayMathQuestion() {
@@ -160,16 +145,14 @@
         }
 
         function startTimer() {
-            timeLeft = 120; // Reset waktu
-            document.getElementById('timer').textContent = `Waktu tersisa: ${timeLeft / 60} menit`;
+            timeLeft = 120;
             timer = setInterval(() => {
                 timeLeft--;
-                document.getElementById('timer').textContent = `Waktu tersisa: ${Math.floor(timeLeft / 60)} menit ${timeLeft % 60} detik`;
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     questionAttempts++;
                     alert("Waktu habis! Pertanyaan baru akan ditampilkan.");
-                    displayMathQuestion(); // Ganti pertanyaan
+                    displayMathQuestion();
                 }
             }, 1000);
         }
@@ -202,23 +185,21 @@
                     document.getElementById('mathAnswer').value = '';
                     clearInterval(timer);
                 } else {
-                    displayMathQuestion(); // Ganti pertanyaan
+                    displayMathQuestion();
                 }
             }
         };
 
         function validateEmailDomain(email) {
-            const validDomains = ["example.com", "yourdomain.com"]; // Ganti dengan domain yang valid
-                        const emailDomain = email.split('@')[1];
+            const validDomains = ["example.com", "yourdomain.com"];
+            const emailDomain = email.split('@')[1];
             return validDomains.includes(emailDomain);
         }
 
         document.getElementById('verifyButton').onclick = function() {
             const verificationCode = document.getElementById('verificationCode').value;
-            // Misalkan kode verifikasi yang benar adalah "123456"
             if (verificationCode === "123456") {
                 alert("Verifikasi berhasil! Selamat datang di situs kami.");
-                // Redirect atau tindakan lain setelah verifikasi berhasil
             } else {
                 alert("Kode verifikasi salah. Silakan coba lagi.");
             }
