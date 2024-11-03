@@ -6,6 +6,7 @@
     <title>Register - Futuristic Website 2100</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Style for form and container */
         body {
             margin: 0;
             padding: 0;
@@ -13,197 +14,172 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: url('https://raw.githubusercontent.com/Missav-vip/X/refs/heads/main/image/IMG_8350.jpeg') no-repeat center center fixed; 
-            background-size: cover; 
+            background: url('https://raw.githubusercontent.com/Missav-vip/X/refs/heads/main/image/IMG_8350.jpeg') no-repeat center center fixed;
+            background-size: cover;
         }
 
-        .container {
+        .verification-container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            width: 90%; 
-            max-width: 400px; 
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(10px); 
-            border-radius: 10px; 
-            padding: 30px; 
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); 
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 300px;
+            width: 90%;
+            color: white;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
         }
 
-        h2 {
-            margin-bottom: 15px;
-            font-family: 'Poppins', sans-serif;
-            color: white; 
-            font-size: 24px; 
-        }
-
-        label {
-            color: white; 
-            font-size: 16px; 
-            margin-top: 10px; 
-        }
-
-        input {
-            margin: 5px 0;
-            padding: 10px; 
-            border: 1px solid rgba(255, 255, 255, 0.8); 
-            border-radius: 5px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.2); 
-            color: white; 
-        }
-
-        button {
+        .verification-container button {
             margin-top: 10px;
-            padding: 10px; 
-            background-color: #ff69b4; 
+            padding: 10px;
+            background-color: #ff69b4;
             border: none;
             border-radius: 5px;
-            color: white; 
+            color: white;
             cursor: pointer;
+            font-size: 16px;
             width: 100%;
-            font-size: 16px; 
         }
 
-        button:hover {
-            background-color: #ff1493; 
+        .verification-container button:hover {
+            background-color: #ff1493;
         }
 
-        p {
-            margin-top: 10px;
-            color: white; 
-        }
-
-        #registrationForm {
-            display: none; 
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Verifikasi Umur</h2>
-        <form id="ageVerificationForm">
-            <label for="age">Masukkan umur Anda:</label>
-            <input type="number" id="age" name="age" required>
-            <button type="submit">Verifikasi</button>
-        </form>
+    <div class="verification-container" id="ageVerification">
+        <h2>Age Verification</h2>
+        <p>Click below to verify you're 18+.</p>
+        <button onclick="startVerification()">I'm 18+</button>
+    </div>
 
-        <div id="registrationForm">
-            <h2>Pendaftaran</h2>
-            <form id="registerForm">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <div id="mathQuestion" class="math-question"></div>
-                <input type="text" id="mathAnswer" placeholder="Jawab pertanyaan di atas" required>
-                <button type="submit">Daftar</button>
-                <p id="domainCheck" style="display: none; color: green;">✔️ Domain valid!</p>
-                <p id="verificationCodePrompt" style="display: none;">Masukkan kode verifikasi yang telah dikirim ke email Anda:</p>
-                <input type="text" id="verificationCode" placeholder="Kode Verifikasi" style="display: none;">
-                <button id="verifyButton" style="display: none;">Verifikasi Kode</button>
-                <p>Sudah punya akun? <a href="login.html">Login sekarang</a></p>
-            </form>
-        </div>
+    <div class="verification-container hidden" id="mathQuestionContainer">
+        <h2>Answer the Question</h2>
+        <p id="mathQuestion"></p>
+        <input type="text" id="mathAnswer" placeholder="Answer here" />
+        <p id="timer"></p>
+        <button onclick="checkAnswer()">Submit Answer</button>
+    </div>
+
+    <div class="verification-container hidden" id="registrationFormContainer">
+        <h2>Enter Verification Code</h2>
+        <p>A 7-digit code has been sent to your email.</p>
+        <input type="text" id="verificationCode" placeholder="Enter code" maxlength="7" />
+        <p id="verificationTimer"></p>
+        <button onclick="verifyCode()">Verify Code</button>
+        <p id="verificationMessage"></p>
     </div>
 
     <script>
         const questions = [
-            { question: "Jika x + 5 = 12, berapa nilai x?", answer: "7" },
-            { question: "Hitunglah nilai dari 2x - 3 = 5. Berapa nilai x?", answer: "4" },
-            { question: "Jika x^2 - 16 = 0, berapa nilai x?", answer: "4,-4" },
-            { question: "Hitunglah 3/4 + 5/8.", answer: "1.25" },
-            { question: "Sebuah segitiga memiliki panjang sisi 5 cm, 12 cm, dan 13 cm. Apakah segitiga ini adalah segitiga siku-siku?", answer: "Ya" }
+            { question: "What is 5 + 7?", answer: "12" },
+            { question: "What is 6 * 6?", answer: "36" },
+            { question: "What is 15 - 8?", answer: "7" },
+            { question: "What is 9 + 3?", answer: "12" },
+            { question: "What is 20 / 4?", answer: "5" }
         ];
 
-        let currentQuestion;
-        let timer;
-        let timeLeft = 120;
+        let codes = [];
+        let verificationCode;
+        let questionTimer, verificationTimer;
         let questionAttempts = 0;
 
-        document.getElementById('ageVerificationForm').onsubmit = function(event) {
-            event.preventDefault();
-            const age = parseInt(document.getElementById('age').value);
-            if (age >= 18) {
-                document.getElementById('registrationForm').style.display = 'block';
-                displayMathQuestion();
-            } else {
-                alert("Anda harus berusia 18 tahun atau lebih untuk mendaftar.");
-            }
-        };
+        // Generate 100 unique 7-digit codes
+        while (codes.length < 100) {
+            let code = Math.floor(1000000 + Math.random() * 9000000).toString();
+            if (!codes.includes(code)) codes.push(code);
+        }
+
+        function startVerification() {
+            document.getElementById('ageVerification').classList.add('hidden');
+            showMathQuestion();
+        }
 
         function getRandomQuestion() {
-            const randomIndex = Math.floor(Math.random() * questions.length);
-            return questions[randomIndex];
+            return questions[Math.floor(Math.random() * questions.length)];
         }
 
-        function displayMathQuestion() {
-            currentQuestion = getRandomQuestion();
-            document.getElementById('mathQuestion').textContent = currentQuestion.question;
-            startTimer();
+        function showMathQuestion() {
+            const { question, answer } = getRandomQuestion();
+            document.getElementById('mathQuestion').textContent = question;
+            document.getElementById('mathQuestionContainer').classList.remove('hidden');
+            startQuestionTimer();
         }
 
-        function startTimer() {
-            timeLeft = 120;
-            timer = setInterval(() => {
+        function startQuestionTimer() {
+            let timeLeft = 180; // 3 minutes
+            document.getElementById('timer').textContent = `Time remaining: ${Math.floor(timeLeft / 60)}:${timeLeft % 60}`;
+            questionTimer = setInterval(() => {
                 timeLeft--;
+                document.getElementById('timer').textContent = `Time remaining: ${Math.floor(timeLeft / 60)}:${timeLeft % 60}`;
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    questionAttempts++;
-                    alert("Waktu habis! Pertanyaan baru akan ditampilkan.");
-                    displayMathQuestion();
+                    clearInterval(questionTimer);
+                    alert("Time's up! Switching question.");
+                    showMathQuestion();
                 }
             }, 1000);
         }
 
-        document.getElementById('registerForm').onsubmit = function(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const isValidDomain = validateEmailDomain(email);
-            if (!isValidDomain) {
-                alert("Email tidak valid! Silakan masukkan email dengan domain yang benar.");
-                return;
-            } else {
-                document.getElementById('domainCheck').style.display = 'block';
-            }
-
+        function checkAnswer() {
             const answer = document.getElementById('mathAnswer').value;
-            if (answer === currentQuestion.answer) {
-                clearInterval(timer);
-                alert("Pendaftaran berhasil!");
-                document.getElementById('verificationCodePrompt').style.display = 'block';
-                document.getElementById('verificationCode').style.display = 'block';
-                document.getElementById('verifyButton').style.display = 'block';
+            if (answer === questions[questionAttempts].answer) {
+                clearInterval(questionTimer);
+                sendVerificationCode();
             } else {
-                alert("Jawaban salah! Silakan coba lagi.");
+                alert("Incorrect answer! Switching question.");
                 questionAttempts++;
-                if (questionAttempts >= 3) {
-                    alert("Anda telah mencapai batas percobaan. Silakan coba lagi nanti.");
-                    document.getElementById('registrationForm').reset();
-                    document.getElementById('mathQuestion').textContent = '';
-                    document.getElementById('mathAnswer').value = '';
-                    clearInterval(timer);
-                } else {
-                    displayMathQuestion();
-                }
+                showMathQuestion();
             }
-        };
-
-        function validateEmailDomain(email) {
-            const validDomains = ["example.com", "yourdomain.com"];
-            const emailDomain = email.split('@')[1];
-            return validDomains.includes(emailDomain);
         }
 
-        document.getElementById('verifyButton').onclick = function() {
-            const verificationCode = document.getElementById('verificationCode').value;
-            if (verificationCode === "123456") {
-                alert("Verifikasi berhasil! Selamat datang di situs kami.");
+        function sendVerificationCode() {
+            document.getElementById('mathQuestionContainer').classList.add('hidden');
+            document.getElementById('registrationFormContainer').classList.remove('hidden');
+            
+            verificationCode = codes[Math.floor(Math.random() * codes.length)];
+            alert(`Verification code (for demo): ${verificationCode}`); // Simulated email sending
+            
+            startVerificationTimer();
+        }
+
+        function startVerificationTimer() {
+            let timeLeft = 300; // 5 minutes
+            document.getElementById('verificationTimer').textContent = `Code active for: ${Math.floor(timeLeft / 60)}:${timeLeft % 60}`;
+            verificationTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('verificationTimer').textContent = `Code active for: ${Math.floor(timeLeft / 60)}:${timeLeft % 60}`;
+                if (timeLeft <= 0) {
+                    clearInterval(verificationTimer);
+                    alert("Code expired! Restarting verification.");
+                    resetVerification();
+                }
+            }, 1000);
+        }
+
+        function verifyCode() {
+            const userCode = document.getElementById('verificationCode').value;
+            if (userCode === verificationCode) {
+                clearInterval(verificationTimer);
+                alert("Verification successful! Welcome to the site.");
             } else {
-                alert("Kode verifikasi salah. Silakan coba lagi.");
+                alert("Invalid code. Please try again.");
             }
-        };
+        }
+
+        function resetVerification() {
+            document.getElementById('ageVerification').classList.remove('hidden');
+            document.getElementById('mathQuestionContainer').classList.add('hidden');
+            document.getElementById('registrationFormContainer').classList.add('hidden');
+            document.getElementById('mathAnswer').value = '';
+            document.getElementById('verificationCode').value = '';
+        }
     </script>
 </body>
 </html>
