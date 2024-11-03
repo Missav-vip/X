@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran - Website Futuristik 2100</title>
+    <title>Form Pendaftaran</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -13,48 +13,47 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: url('https://raw.githubusercontent.com/Missav-vip/X/refs/heads/main/image/IMG_8350.jpeg') no-repeat center center fixed; 
-            background-size: cover; 
+            background: url('background-image-url.jpg') no-repeat center center fixed; 
+            background-size: cover;
         }
 
-        .register-container {
-            display: flex;
+        .form-container {
+            display: none; /* Tersembunyi sampai diaktifkan */
             flex-direction: column;
             justify-content: center;
             align-items: center;
             width: 90%;
-            max-width: 400px; /* Lebar maksimum form */
+            max-width: 400px;
             background: rgba(255, 255, 255, 0); /* Transparan */
-            backdrop-filter: none; /* Tidak ada blur */
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
-        .register-container h2 {
+        .form-container h2, .countdown {
             margin-bottom: 15px;
-            font-family: 'Poppins', sans-serif;
             color: white;
             font-size: 24px;
         }
 
-        .register-container label {
+        .form-container label {
             color: white;
             font-size: 16px;
             margin-top: 10px;
         }
 
-        .register-container input, .register-container select {
+        .form-container input, .form-container select {
             margin: 5px 0;
             padding: 10px;
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 5px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.1);
+            background: transparent; /* Transparan */
             color: white;
+            border-bottom: 1px solid white; /* Hanya garis bawah */
         }
 
-        .register-container button {
+        .form-container button {
             margin-top: 10px;
             padding: 10px;
             background-color: #ff69b4;
@@ -65,54 +64,148 @@
             width: 100%;
             font-size: 16px;
         }
-        
-        .register-container button:hover {
+
+        .form-container button:hover {
             background-color: #ff1493;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            font-size: 20px;
+            color: white;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
         }
     </style>
 </head>
 <body>
-    <div class="register-container">
-        <h2>Pendaftaran</h2>
-        <form id="registrationForm">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+    <div class="countdown" id="countdown">Menunggu 1 menit... <span id="timer">60</span></div>
+    
+    <div class="form-container" id="age-verification">
+        <h2>Verifikasi Umur</h2>
+        <p id="question"></p>
+        <input type="text" id="answer" placeholder="Jawaban">
+        <button id="submit-answer-btn">Submit</button>
+    </div>
 
-            <label for="domain">Domain (aktif):</label>
-            <input type="text" id="domain" name="domain" required>
+    <div class="form-container" id="registration-container">
+        <h2>Form Pendaftaran</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+        <label for="domain">Domain:</label>
+        <input type="text" id="domain" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <label for="confirm-password">Verifikasi Password:</label>
+        <input type="password" id="confirm-password" required>
+        <label for="gender">Jenis Kelamin:</label>
+        <select id="gender">
+            <option value="male">Pria</option>
+            <option value="female">Wanita</option>
+        </select>
+        <label for="country">Negara:</label>
+        <select id="country">
+            <option value="ID">Indonesia</option>
+            <option value="US">Amerika Serikat</option>
+            <!-- Tambahkan negara lainnya sesuai kebutuhan -->
+        </select>
+        <button id="register-btn">Daftar</button>
+    </div>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <label for="confirmPassword">Verifikasi Password:</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" required>
-
-            <label for="gender">Jenis Kelamin:</label>
-            <select id="gender" name="gender" required>
-                <option value="male">Pria</option>
-                <option value="female">Wanita</option>
-                <option value="other">Lainnya</option>
-            </select>
-
-            <label for="countryAndLanguage">Negara dan Bahasa:</label>
-            <select id="countryAndLanguage" name="countryAndLanguage" required>
-                <option value="" disabled selected>Pilih Negara dan Bahasa</option>
-                <option value="indonesia:indonesian">Indonesia (Bahasa Indonesia)</option>
-                <option value="malaysia:malay">Malaysia (Bahasa Melayu)</option>
-                <option value="singapore:mandarin">Singapura (Mandarin)</option>
-                <option value="united_states:english">Amerika Serikat (Inggris)</option>
-                <!-- Tambahkan semua negara dan bahasa yang relevan di sini -->
-            </select>
-
-            <button type="submit">Daftar</button>
-        </form>
+    <div class="form-container hidden" id="token-verification-container">
+        <h2>Token Verifikasi</h2>
+        <input type="text" id="token" placeholder="Masukkan Token">
+        <button id="verify-token-btn">Verifikasi</button>
     </div>
 
     <script>
-        document.getElementById('registrationForm').onsubmit = function(event) {
-            event.preventDefault();
-            // Tambahkan logika pendaftaran di sini
-            alert("Pendaftaran berhasil!"); // Pesan sukses
+        const questions = [
+            { question: "Jika x + 5 = 12, berapa nilai x?", answer: "7" },
+            { question: "Hitunglah nilai dari 2x - 3 = 5. Berapa nilai x?", answer: "4" }
+            // Tambahkan pertanyaan lainnya sesuai kebutuhan
+        ];
+
+        let currentQuestion;
+        let timer;
+        let countdown = 60;
+
+        document.getElementById('countdown').style.display = 'flex';
+        const countdownTimer = setInterval(() => {
+            document.getElementById('timer').innerText = countdown;
+            countdown--;
+            if (countdown < 0) {
+                clearInterval(countdownTimer);
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('age-verification').style.display = 'flex';
+                currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+                document.getElementById('question').innerText = currentQuestion.question;
+            }
+        }, 1000);
+
+        document.getElementById('submit-answer-btn').onclick = function() {
+            const answer = document.getElementById('answer').value;
+            if (answer === currentQuestion.answer) {
+                document.getElementById('registration-container').style.display = 'flex';
+                document.getElementById('age-verification').style.display = 'none';
+
+                // Menampilkan animasi loading selama 20 detik
+                const loadingContainer = document.createElement('div');
+                loadingContainer.className = 'loading';
+                loadingContainer.innerText = 'Loading...';
+                document.body.appendChild(loadingContainer);
+                setTimeout(() => {
+                    loadingContainer.innerText = 'Loading selesai!';
+                    setTimeout(() => {
+                        document.body.removeChild(loadingContainer);
+                    }, 1000);
+                }, 20000); // 20 detik
+            } else {
+                alert("Jawaban salah! Kembali ke timer.");
+                countdown = 60;
+                document.getElementById('countdown').style.display = 'flex';
+                document.getElementById('age-verification').style.display = 'none';
+                document.getElementById('timer').innerText = countdown;
+                // Mulai ulang timer
+                const restartTimer = setInterval(() => {
+                    document.getElementById('timer').innerText = countdown;
+                    countdown--;
+                    if (countdown < 0) {
+                        clearInterval(restartTimer);
+                        document.getElementById('age-verification').style.display = 'flex';
+                        currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+                        document.getElementById('question').innerText = currentQuestion.question;
+                    }
+                }, 1000);
+            }
+        };
+
+        document.getElementById('register-btn').onclick = function() {
+            // Validasi domain (simulasi)
+            const domain = document.getElementById('domain').value;
+            if (domain !== "") { // Cek apakah domain tidak kosong
+                document.getElementById('registration-container').style.display = 'none';
+                document.getElementById('token-verification-container').style.display = 'flex';
+            } else {
+                alert("Domain harus diisi dan terverifikasi!");
+            }
+        };
+
+        document.getElementById('verify-token-btn').onclick = function() {
+            const token = document.getElementById('token').value;
+            // Validasi token (simulasi)
+            if (token === "1234567") { // Ganti dengan token yang valid
+                alert("Pendaftaran berhasil!");
+                // Lakukan proses pendaftaran di sini
+            } else {
+                alert("Token salah! Silakan ulangi pendaftaran.");
+                location.reload(); // Ulangi pendaftaran
+            }
         };
     </script>
 </body>
