@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Futuristic Website 2100</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap">
     <style>
-        /* Style for form and container */
         body {
             margin: 0;
             padding: 0;
@@ -16,51 +15,105 @@
             height: 100vh;
             background: url('https://raw.githubusercontent.com/Missav-vip/X/refs/heads/main/image/IMG_8350.jpeg') no-repeat center center fixed;
             background-size: cover;
+            font-family: 'Roboto', sans-serif;
+            color: white;
         }
 
-        .verification-container {
+        .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 10px;
-            max-width: 300px;
             width: 90%;
-            color: white;
+            max-width: 300px;
             text-align: center;
-            font-family: 'Arial', sans-serif;
         }
 
-        .verification-container button {
+        h2 {
+            font-weight: 700;
+        }
+
+        .container p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .container button {
             margin-top: 10px;
-            padding: 10px;
+            padding: 8px;
             background-color: #ff69b4;
             border: none;
             border-radius: 5px;
             color: white;
             cursor: pointer;
-            font-size: 16px;
-            width: 100%;
+            font-size: 14px;
+            width: auto;
+            min-width: 100px;
         }
 
-        .verification-container button:hover {
+        .container button:hover {
             background-color: #ff1493;
         }
 
-        .hidden {
-            display: none;
+        input[type="text"], input[type="email"], input[type="password"] {
+            margin-top: 5px;
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0);
+            color: white;
+            text-align: center;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-bottom: 1px solid #ff69b4;
+        }
+
+        #timer, #verificationTimer {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #ff69b4;
+        }
+
+        /* Media queries untuk orientasi portrait */
+        @media only screen and (orientation: portrait) {
+            .container {
+                max-width: 250px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            .container p {
+                font-size: 12px;
+            }
+
+            .container button {
+                font-size: 12px;
+                padding: 6px;
+            }
+
+            input[type="text"], input[type="email"], input[type="password"] {
+                font-size: 12px;
+                padding: 6px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="verification-container" id="ageVerification">
+    <div class="container" id="ageVerification">
         <h2>Age Verification</h2>
         <p>Click below to verify you're 18+.</p>
         <button onclick="startVerification()">I'm 18+</button>
     </div>
 
-    <div class="verification-container hidden" id="mathQuestionContainer">
+    <div class="container hidden" id="mathQuestionContainer">
         <h2>Answer the Question</h2>
         <p id="mathQuestion"></p>
         <input type="text" id="mathAnswer" placeholder="Answer here" />
@@ -68,118 +121,16 @@
         <button onclick="checkAnswer()">Submit Answer</button>
     </div>
 
-    <div class="verification-container hidden" id="registrationFormContainer">
+    <div class="container hidden" id="registrationFormContainer">
         <h2>Enter Verification Code</h2>
-        <p>A 7-digit code has been sent to your email.</p>
+        <p>A 7-digit code has been sent to your email after registration.</p>
         <input type="text" id="verificationCode" placeholder="Enter code" maxlength="7" />
         <p id="verificationTimer"></p>
         <button onclick="verifyCode()">Verify Code</button>
-        <p id="verificationMessage"></p>
     </div>
 
     <script>
-        const questions = [
-            { question: "What is 5 + 7?", answer: "12" },
-            { question: "What is 6 * 6?", answer: "36" },
-            { question: "What is 15 - 8?", answer: "7" },
-            { question: "What is 9 + 3?", answer: "12" },
-            { question: "What is 20 / 4?", answer: "5" }
-        ];
-
-        let codes = [];
-        let verificationCode;
-        let questionTimer, verificationTimer;
-        let questionAttempts = 0;
-
-        // Generate 100 unique 7-digit codes
-        while (codes.length < 100) {
-            let code = Math.floor(1000000 + Math.random() * 9000000).toString();
-            if (!codes.includes(code)) codes.push(code);
-        }
-
-        function startVerification() {
-            document.getElementById('ageVerification').classList.add('hidden');
-            showMathQuestion();
-        }
-
-        function getRandomQuestion() {
-            return questions[Math.floor(Math.random() * questions.length)];
-        }
-
-        function showMathQuestion() {
-            const { question, answer } = getRandomQuestion();
-            document.getElementById('mathQuestion').textContent = question;
-            document.getElementById('mathQuestionContainer').classList.remove('hidden');
-            startQuestionTimer();
-        }
-
-        function startQuestionTimer() {
-            let timeLeft = 180; // 3 minutes
-            document.getElementById('timer').textContent = `Time remaining: ${Math.floor(timeLeft / 60)}:${timeLeft % 60}`;
-            questionTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').textContent = `Time remaining: ${Math.floor(timeLeft / 60)}:${timeLeft % 60}`;
-                if (timeLeft <= 0) {
-                    clearInterval(questionTimer);
-                    alert("Time's up! Switching question.");
-                    showMathQuestion();
-                }
-            }, 1000);
-        }
-
-        function checkAnswer() {
-            const answer = document.getElementById('mathAnswer').value;
-            if (answer === questions[questionAttempts].answer) {
-                clearInterval(questionTimer);
-                sendVerificationCode();
-            } else {
-                alert("Incorrect answer! Switching question.");
-                questionAttempts++;
-                showMathQuestion();
-            }
-        }
-
-        function sendVerificationCode() {
-            document.getElementById('mathQuestionContainer').classList.add('hidden');
-            document.getElementById('registrationFormContainer').classList.remove('hidden');
-            
-            verificationCode = codes[Math.floor(Math.random() * codes.length)];
-            alert(`Verification code (for demo): ${verificationCode}`); // Simulated email sending
-            
-            startVerificationTimer();
-        }
-
-        function startVerificationTimer() {
-            let timeLeft = 300; // 5 minutes
-            document.getElementById('verificationTimer').textContent = `Code active for: ${Math.floor(timeLeft / 60)}:${timeLeft % 60}`;
-            verificationTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('verificationTimer').textContent = `Code active for: ${Math.floor(timeLeft / 60)}:${timeLeft % 60}`;
-                if (timeLeft <= 0) {
-                    clearInterval(verificationTimer);
-                    alert("Code expired! Restarting verification.");
-                    resetVerification();
-                }
-            }, 1000);
-        }
-
-        function verifyCode() {
-            const userCode = document.getElementById('verificationCode').value;
-            if (userCode === verificationCode) {
-                clearInterval(verificationTimer);
-                alert("Verification successful! Welcome to the site.");
-            } else {
-                alert("Invalid code. Please try again.");
-            }
-        }
-
-        function resetVerification() {
-            document.getElementById('ageVerification').classList.remove('hidden');
-            document.getElementById('mathQuestionContainer').classList.add('hidden');
-            document.getElementById('registrationFormContainer').classList.add('hidden');
-            document.getElementById('mathAnswer').value = '';
-            document.getElementById('verificationCode').value = '';
-        }
+        // Logika verifikasi umur dan pertanyaan matematika akan ditambahkan di sini
     </script>
 </body>
 </html>
