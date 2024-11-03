@@ -22,74 +22,141 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 200px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 300px; /* Lebar form yang lebih besar untuk desktop */
+            background: rgba(255, 255, 255, 0); /* Latar belakang transparan */
+            backdrop-filter: blur(10px); /* Efek blur untuk transparansi */
+            border-radius: 10px; /* Sudut melengkung */
+            padding: 30px; /* Ruang dalam */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Bayangan */
         }
 
         .register-container h2 {
             margin-bottom: 15px;
             font-family: 'Poppins', sans-serif;
-            color: #333;
-            font-size: 20px;
+            color: white; /* Warna teks putih */
+            font-size: 24px; /* Ukuran font lebih besar untuk desktop */
+        }
+
+        .register-container label {
+            color: white; /* Warna label putih */
+            font-size: 16px; /* Ukuran font label */
+            margin-top: 10px; /* Jarak atas label */
         }
 
         .register-container input {
             margin: 5px 0;
-            padding: 8px;
-            border: 1px solid #ccc;
+            padding: 10px; /* Padding lebih besar untuk kenyamanan pengguna */
+            border: 1px solid rgba(255, 255, 255, 0.8); /* Border putih transparan */
             border-radius: 5px;
             width: 100%;
+            background: rgba(255, 255, 255, 0.1); /* Latar belakang input transparan */
+            color: white; /* Warna teks input putih */
         }
 
         .register-container button {
             margin-top: 10px;
-            padding: 8px;
-            background-color: #ff69b4;
+            padding: 10px; /* Padding tombol lebih besar */
+            background-color: #ff69b4; /* Warna latar belakang tombol */
             border: none;
             border-radius: 5px;
-            color: white;
+            color: white; /* Warna teks tombol putih */
             cursor: pointer;
             width: 100%;
+            font-size: 16px; /* Ukuran font tombol */
         }
         
         .register-container button:hover {
-            background-color: #ff1493;
+            background-color: #ff1493; /* Warna latar belakang tombol saat hover */
         }
 
         .register-container p {
             margin-top: 10px;
-            color: #555;
+            color: white; /* Warna teks paragraf putih */
         }
 
         .register-container a {
-            color: #ff69b4;
+            color: #ff69b4; /* Warna tautan */
             text-decoration: none;
         }
 
         .register-container a:hover {
             text-decoration: underline;
         }
+
+        /* Gaya untuk menu verifikasi 18+ */
+        .verification-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            color: white; /* Warna teks verifikasi putih */
+        }
+
+        .verification-container button {
+            margin-top: 10px;
+            padding: 10px; /* Padding tombol verifikasi lebih besar */
+            background-color: #ff69b4; /* Warna latar belakang tombol verifikasi */
+            border: none;
+            border-radius: 5px;
+            color: white; /* Warna teks tombol verifikasi putih */
+            cursor: pointer;
+            font-size: 16px; /* Ukuran font tombol verifikasi */
+        }
+        
+        .verification-container button:hover {
+            background-color: #ff1493; /* Warna latar belakang tombol verifikasi saat hover */
+        }
+
+        @media (max-width: 768px) {
+            .register-container {
+                width: 90%; /* Lebar responsif pada perangkat lebih kecil */
+                padding: 20px; /* Ruang dalam lebih kecil */
+            }
+
+            .register-container h2 {
+                font-size: 20px; /* Ukuran font lebih kecil untuk perangkat kecil */
+            }
+
+            .register-container label {
+                font-size: 14px; /* Ukuran font label lebih kecil untuk perangkat kecil */
+            }
+
+            .register-container button {
+                font-size: 14px; /* Ukuran font tombol lebih kecil untuk perangkat kecil */
+            }
+        }
     </style>
 </head>
 <body>
     <div class="register-container">
-        <h2>Pendaftaran</h2>
-        <form id="registerForm">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+        <h2>Verifikasi Usia</h2>
+        <div class="verification-container">
+            <p>Anda harus berusia 18 tahun ke atas untuk mendaftar.</p>
+            <button onclick="showRegistration()">Saya Berusia 18+</button>
+        </div>
+        <div id="registrationForm" style="display: none;">
+            <h2>Pendaftaran</h2>
+            <form id="registerForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
 
-            <button type="submit">Daftar</button>
-        </form>
-        <p>Sudah punya akun? <a href="login.html">Login sekarang</a></p>
+                <button type="submit">Daftar</button>
+            </form>
+            <p>Sudah punya akun? <a href="login.html">Login sekarang</a></p>
+        </div>
     </div>
+
+    <script>
+        function showRegistration() {
+            document.querySelector('.verification-container').style.display = 'none';
+            document.getElementById('registrationForm').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
