@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Pendaftaran</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Futuristic Website 2100</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> <!-- Tautan ke file CSS terpisah -->
     <style>
+        /* Tambahan CSS untuk Form Pendaftaran */
         body {
             margin: 0;
             padding: 0;
@@ -13,7 +16,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: url('background-image-url.jpg') no-repeat center center fixed; 
+            background: url('https://raw.githubusercontent.com/Missav-vip/X/refs/heads/main/image/IMG_8350.jpeg') no-repeat center center fixed; 
             background-size: cover;
         }
 
@@ -85,6 +88,16 @@
     </style>
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Products</a>
+            <a href="#">Contact</a>
+            <a href="#">Log-In</a>
+        </nav>
+    </header>
+    
     <div class="countdown" id="countdown">Menunggu 1 menit... <span id="timer">60</span></div>
     
     <div class="form-container" id="age-verification">
@@ -123,6 +136,8 @@
         <input type="text" id="token" placeholder="Masukkan Token">
         <button id="verify-token-btn">Verifikasi</button>
     </div>
+
+    <div class="footer-text">© Futuristic Website 2k22. All rights reserved.</div>
 
     <script>
         const questions = [
@@ -201,7 +216,8 @@
             // Validasi token (simulasi)
             if (token === "1234567") { // Ganti dengan token yang valid
                 alert("Pendaftaran berhasil!");
-                // Lakukan proses pendaftaran di sini
+                //                alert("Pendaftaran berhasil!");
+                // Lakukan proses pendaftaran di sini, seperti menyimpan data ke server
             } else {
                 alert("Token salah! Silakan ulangi pendaftaran.");
                 location.reload(); // Ulangi pendaftaran
