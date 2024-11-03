@@ -62,3 +62,62 @@ nav a:hover {
     padding: 10px 15px;
     border-radius: 5px;
 }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('images/background-image.jpg'); /* Ganti dengan URL gambar Anda */
+    background-size: cover;
+    color: #333;
+}
+
+header .banner {
+    background: rgba(0, 0, 0, 0.7); /* Transparan */
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.login-container, .register-container, .vip-container {
+    background: rgba(255, 255, 255, 0.9); /* Transparan dengan latar belakang putih */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    margin: 50px auto; /* Tengah secara horizontal */
+    transition: transform 0.2s; /* Animasi saat hover */
+}
+
+.login-container:hover, .register-container:hover, .vip-container:hover {
+    transform: scale(1.02); /* Membesar sedikit saat hover */
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Animasi saat hover */
+}
+
+button:hover {
+    background-color: #4cae4c; /* Warna saat hover */
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+    header .banner {
+        font-size: 18px; /* Ukuran font lebih kecil untuk perangkat mobile */
+    }
+
+    .login-container, .register-container, .vip-container {
+        width: 90%; /* Lebar form lebih lebar di mobile */
+    }
+}
