@@ -88,6 +88,11 @@
             color: white; /* Warna pertanyaan pendidikan */
             margin: 10px 0; /* Jarak vertikal untuk pertanyaan pendidikan */
         }
+
+        .timer {
+            color: white; /* Warna timer */
+            margin: 5px 0; /* Jarak vertikal untuk timer */
+        }
     </style>
 </head>
 <body>
@@ -110,9 +115,14 @@
 
                 <div id="mathQuestion" class="math-question"></div>
                 <input type="text" id="mathAnswer" placeholder="Jawab pertanyaan di atas" required>
+                <div id="timer" class="timer"></div>
 
                 <button type="submit">Daftar</button>
             </form>
+            <p id="domainCheck" style="display: none; color: green;">✔️ Domain valid!</p>
+            <p id="verificationCodePrompt" style="display: none;">Masukkan kode verifikasi yang telah dikirim ke email Anda:</p>
+            <input type="text" id="verificationCode" placeholder="Kode Verifikasi" style="display: none;">
+            <button id="verifyButton" style="display: none;">Verifikasi Kode</button>
             <p>Sudah punya akun? <a href="login.html">Login sekarang</a></p>
         </div>
     </div>
@@ -126,35 +136,91 @@
             { question: "Sebuah segitiga memiliki panjang sisi 5 cm, 12 cm, dan 13 cm. Apakah segitiga ini adalah segitiga siku-siku?", answer: "Ya" }
         ];
 
+        let currentQuestion;
+        let timer;
+        let timeLeft = 120; // 2 menit untuk menjawab
+        let questionAttempts = 0; // Jumlah percobaan pertanyaan
+
         function getRandomQuestion() {
             const randomIndex = Math.floor(Math.random() * questions.length);
             return questions[randomIndex];
         }
 
-        let currentQuestion = getRandomQuestion();
-
         function showRegistration() {
             document.querySelector('.register-container p').style.display = 'none';
             document.getElementById('registrationForm').style.display = 'block';
+            document.getElementById('domainCheck').style.display = 'none';
             displayMathQuestion();
         }
 
         function displayMathQuestion() {
-            const questionElement = document.getElementById('mathQuestion');
-            questionElement.textContent = currentQuestion.question;
+            currentQuestion = getRandomQuestion();
+            document.getElementById('mathQuestion').textContent = currentQuestion.question;
+            startTimer();
+        }
+
+        function startTimer() {
+            timeLeft = 120; // Reset waktu
+            document.getElementById('timer').textContent = `Waktu tersisa: ${timeLeft / 60} menit`;
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = `Waktu tersisa: ${Math.floor(timeLeft / 60)} menit ${timeLeft % 60} detik`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    questionAttempts++;
+                    alert("Waktu habis! Pertanyaan baru akan ditampilkan.");
+                    displayMathQuestion(); // Ganti pertanyaan
+                }
+            }, 1000);
         }
 
         document.getElementById('registerForm').onsubmit = function(event) {
             event.preventDefault();
+            const email = document.getElementById('email').value;
+            const isValidDomain = validateEmailDomain(email);
+            if (!isValidDomain) {
+                alert("Email tidak valid! Silakan masukkan email dengan domain yang benar.");
+                return;
+            } else {
+                document.getElementById('domainCheck').style.display = 'block';
+            }
+
             const answer = document.getElementById('mathAnswer').value;
             if (answer === currentQuestion.answer) {
+                clearInterval(timer);
                 alert("Pendaftaran berhasil!");
-                // Proses pendaftaran disini
+                document.getElementById('verificationCodePrompt').style.display = 'block';
+                document.getElementById('verificationCode').style.display = 'block';
+                document.getElementById('verifyButton').style.display = 'block';
             } else {
-                currentQuestion = getRandomQuestion(); // Ganti pertanyaan
-                displayMathQuestion(); // Tampilkan pertanyaan baru
-                document.getElementById('mathAnswer').value = ''; // Reset input
                 alert("Jawaban salah! Silakan coba lagi.");
+                questionAttempts++;
+                if (questionAttempts >= 3) {
+                    alert("Anda telah mencapai batas percobaan. Silakan coba lagi nanti.");
+                    document.getElementById('registrationForm').reset();
+                    document.getElementById('mathQuestion').textContent = '';
+                    document.getElementById('mathAnswer').value = '';
+                    clearInterval(timer);
+                } else {
+                    displayMathQuestion(); // Ganti pertanyaan
+                }
+            }
+        };
+
+        function validateEmailDomain(email) {
+            const validDomains = ["example.com", "yourdomain.com"]; // Ganti dengan domain yang valid
+                        const emailDomain = email.split('@')[1];
+            return validDomains.includes(emailDomain);
+        }
+
+        document.getElementById('verifyButton').onclick = function() {
+            const verificationCode = document.getElementById('verificationCode').value;
+            // Misalkan kode verifikasi yang benar adalah "123456"
+            if (verificationCode === "123456") {
+                alert("Verifikasi berhasil! Selamat datang di situs kami.");
+                // Redirect atau tindakan lain setelah verifikasi berhasil
+            } else {
+                alert("Kode verifikasi salah. Silakan coba lagi.");
             }
         };
     </script>
