@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Futuristic Website 2100</title>
+    <title>Login - Futuristic Website 2100</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -17,12 +17,12 @@
             background-size: cover; 
         }
 
-        .register-container {
+        .login-container {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 300px; /* Lebar form yang lebih besar untuk desktop */
+            width: 300px; /* Ukuran form untuk desktop */
             background: rgba(255, 255, 255, 0); /* Latar belakang transparan */
             backdrop-filter: blur(10px); /* Efek blur untuk transparansi */
             border-radius: 10px; /* Sudut melengkung */
@@ -30,20 +30,20 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Bayangan */
         }
 
-        .register-container h2 {
+        .login-container h2 {
             margin-bottom: 15px;
             font-family: 'Poppins', sans-serif;
             color: white; /* Warna teks putih */
             font-size: 24px; /* Ukuran font lebih besar untuk desktop */
         }
 
-        .register-container label {
+        .login-container label {
             color: white; /* Warna label putih */
             font-size: 16px; /* Ukuran font label */
             margin-top: 10px; /* Jarak atas label */
         }
 
-        .register-container input {
+        .login-container input {
             margin: 5px 0;
             padding: 10px; /* Padding lebih besar untuk kenyamanan pengguna */
             border: 1px solid rgba(255, 255, 255, 0.8); /* Border putih transparan */
@@ -53,7 +53,7 @@
             color: white; /* Warna teks input putih */
         }
 
-        .register-container button {
+        .login-container button {
             margin-top: 10px;
             padding: 10px; /* Padding tombol lebih besar */
             background-color: #ff69b4; /* Warna latar belakang tombol */
@@ -65,98 +65,58 @@
             font-size: 16px; /* Ukuran font tombol */
         }
         
-        .register-container button:hover {
+        .login-container button:hover {
             background-color: #ff1493; /* Warna latar belakang tombol saat hover */
         }
 
-        .register-container p {
+        .login-container p {
             margin-top: 10px;
             color: white; /* Warna teks paragraf putih */
         }
 
-        .register-container a {
+        .login-container a {
             color: #ff69b4; /* Warna tautan */
             text-decoration: none;
         }
 
-        .register-container a:hover {
+        .login-container a:hover {
             text-decoration: underline;
         }
 
-        /* Gaya untuk menu verifikasi 18+ */
-        .verification-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-            color: white; /* Warna teks verifikasi putih */
-        }
-
-        .verification-container button {
-            margin-top: 10px;
-            padding: 10px; /* Padding tombol verifikasi lebih besar */
-            background-color: #ff69b4; /* Warna latar belakang tombol verifikasi */
-            border: none;
-            border-radius: 5px;
-            color: white; /* Warna teks tombol verifikasi putih */
-            cursor: pointer;
-            font-size: 16px; /* Ukuran font tombol verifikasi */
-        }
-        
-        .verification-container button:hover {
-            background-color: #ff1493; /* Warna latar belakang tombol verifikasi saat hover */
-        }
-
-        @media (max-width: 768px) {
-            .register-container {
-                width: 90%; /* Lebar responsif pada perangkat lebih kecil */
+        /* Gaya untuk tampilan portrait */
+        @media (orientation: portrait) {
+            .login-container {
+                width: 90%; /* Lebar responsif untuk potret */
                 padding: 20px; /* Ruang dalam lebih kecil */
             }
 
-            .register-container h2 {
-                font-size: 20px; /* Ukuran font lebih kecil untuk perangkat kecil */
+            .login-container h2 {
+                font-size: 20px; /* Ukuran font lebih kecil untuk potret */
             }
 
-            .register-container label {
-                font-size: 14px; /* Ukuran font label lebih kecil untuk perangkat kecil */
+            .login-container label {
+                font-size: 14px; /* Ukuran font label lebih kecil untuk potret */
             }
 
-            .register-container button {
-                font-size: 14px; /* Ukuran font tombol lebih kecil untuk perangkat kecil */
+            .login-container button {
+                font-size: 14px; /* Ukuran font tombol lebih kecil untuk potret */
             }
         }
     </style>
 </head>
 <body>
-    <div class="register-container">
-        <h2>Verifikasi Usia</h2>
-        <div class="verification-container">
-            <p>Anda harus berusia 18 tahun ke atas untuk mendaftar.</p>
-            <button onclick="showRegistration()">Saya Berusia 18+</button>
-        </div>
-        <div id="registrationForm" style="display: none;">
-            <h2>Pendaftaran</h2>
-            <form id="registerForm">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
 
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-
-                <button type="submit">Daftar</button>
-            </form>
-            <p>Sudah punya akun? <a href="login.html">Login sekarang</a></p>
-        </div>
+            <button type="submit">Masuk</button>
+        </form>
+        <p>Belum punya akun? <a href="register.html">Daftar sekarang</a></p>
     </div>
-
-    <script>
-        function showRegistration() {
-            document.querySelector('.verification-container').style.display = 'none';
-            document.getElementById('registrationForm').style.display = 'block';
-        }
-    </script>
 </body>
 </html>
