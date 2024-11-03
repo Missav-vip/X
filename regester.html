@@ -26,21 +26,22 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.01);
             padding: 20px;
             border-radius: 10px;
             width: 90%;
-            max-width: 350px;
+            max-width: 400px;
             text-align: center;
             backdrop-filter: blur(10px);
         }
 
         h2 {
             font-weight: 700;
+            margin-bottom: 10px;
         }
 
         /* Button and input styling */
-        .container button {
+        .container button, .container select {
             margin-top: 10px;
             padding: 10px;
             background-color: #ff69b4;
@@ -49,16 +50,17 @@
             color: white;
             cursor: pointer;
             font-size: 16px;
-            width: auto;
-            min-width: 120px;
+            width: 100%;
+            max-width: 300px;
         }
 
         .container button:hover {
             background-color: #ff1493;
         }
 
-        input[type="text"], input[type="email"], input[type="password"] {
+        input[type="text"], input[type="email"], input[type="password"], select {
             width: 100%;
+            max-width: 300px;
             margin-top: 10px;
             padding: 8px;
             border: 1px solid rgba(255, 255, 255, 0.5);
@@ -66,13 +68,6 @@
             background: transparent;
             color: white;
             font-size: 14px;
-        }
-
-        /* Timer styling */
-        .timer {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #ff69b4;
         }
 
         /* Responsive adjustments */
@@ -84,111 +79,60 @@
 
         @media (orientation: portrait) {
             .container {
-                max-width: 300px;
+                max-width: 350px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Age Verification</h2>
-        <p>Please wait 1 minute before you can continue.</p>
-        <div class="timer" id="waitingTimer">Time left: 1:00</div>
-        <button id="ageConfirmBtn" onclick="showQuestion()" disabled>18+ Confirm</button>
+        <h2>Registration Form</h2>
         
-        <div id="questionContainer" style="display: none;">
-            <p id="questionText">Answer the question to proceed.</p>
-            <input type="text" id="answerInput" placeholder="Your answer here">
-            <button id="submitAnswerBtn" onclick="submitAnswer()">Submit</button>
-            <div class="timer" id="questionTimer">Time left: 3:00</div>
-        </div>
+        <!-- Language selection -->
+        <label for="language" style="color: #ff69b4; font-weight: bold;">Choose Language</label>
+        <select id="language" name="language">
+            <option value="en">English</option>
+            <option value="id">Indonesian</option>
+            <!-- Add more languages as needed -->
+        </select>
 
-        <div id="registrationContainer" style="display: none;">
-            <h2>Registration Form</h2>
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="password" placeholder="Password">
-            <button onclick="submitRegistration()">Register</button>
-        </div>
+        <!-- Username field -->
+        <input type="text" id="username" placeholder="Username (Use Nickname or Real Name)">
+        
+        <!-- Domain field -->
+        <input type="text" id="domain" placeholder="Domain (Must Be Active)">
 
-        <div id="verificationContainer" style="display: none;">
-            <h2>Enter Verification Code</h2>
-            <input type="text" id="verificationCode" placeholder="Verification Code">
-            <button onclick="verifyCode()">Verify</button>
-        </div>
+        <!-- Password fields -->
+        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="confirm_password" placeholder="Verify Password (Online)">
+
+        <!-- Gender field -->
+        <select id="gender">
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+        </select>
+
+        <!-- Country field -->
+        <select id="country">
+            <option value="">Select Country</option>
+            <option value="US">United States</option>
+            <option value="ID">Indonesia</option>
+            <option value="UK">United Kingdom</option>
+            <!-- Add more countries as needed -->
+        </select>
+
+        <!-- Additional Elite Registration options -->
+        <input type="text" id="elite_code" placeholder="Elite Code (Optional)">
+        
+        <!-- Submit button -->
+        <button onclick="submitForm()">Register</button>
     </div>
 
     <script>
-        // Timer setup for age confirmation delay (1 minute)
-        let waitTime = 60;
-        const ageConfirmBtn = document.getElementById('ageConfirmBtn');
-        const waitingTimer = document.getElementById('waitingTimer');
-        const questionContainer = document.getElementById('questionContainer');
-        
-        const waitTimer = setInterval(() => {
-            waitTime--;
-            waitingTimer.textContent = `Time left: ${Math.floor(waitTime / 60)}:${(waitTime % 60).toString().padStart(2, '0')}`;
-            if (waitTime <= 0) {
-                clearInterval(waitTimer);
-                ageConfirmBtn.disabled = false;
-            }
-        }, 1000);
-
-        // Question setup
-        const questions = [
-            { question: "Jika x + 5 = 12, berapa nilai x?", answer: "7" },
-            { question: "Hitunglah nilai dari 2x - 3 = 5. Berapa nilai x?", answer: "4" }
-        ];
-        let questionAttempts = 0;
-        let correctAnswers = 0;
-        let questionTime = 180;
-        let currentQuestion;
-
-        function showQuestion() {
-            document.getElementById('questionContainer').style.display = 'block';
-            document.getElementById('ageConfirmBtn').style.display = 'none';
-            setNewQuestion();
-            startQuestionTimer();
-        }
-
-        function setNewQuestion() {
-            currentQuestion = questions[Math.floor(Math.random() * questions.length)];
-            document.getElementById('questionText').textContent = currentQuestion.question;
-            document.getElementById('answerInput').value = '';
-        }
-
-        function submitAnswer() {
-            const answer = document.getElementById('answerInput').value;
-            if (answer === currentQuestion.answer) {
-                correctAnswers++;
-                if (correctAnswers >= 5) {
-                    clearInterval(questionTimer);
-                    questionContainer.style.display = 'none';
-                    document.getElementById('registrationContainer').style.display = 'block';
-                } else {
-                    setNewQuestion();
-                }
-            } else {
-                setNewQuestion();
-            }
-        }
-
-        // Timer setup for each question (3 minutes)
-        const questionTimer = setInterval(() => {
-            questionTime--;
-            document.getElementById('questionTimer').textContent = `Time left: ${Math.floor(questionTime / 60)}:${(questionTime % 60).toString().padStart(2, '0')}`;
-            if (questionTime <= 0) {
-                questionTime = 180;
-                setNewQuestion();
-            }
-        }, 1000);
-
-        function submitRegistration() {
-            document.getElementById('registrationContainer').style.display = 'none';
-            document.getElementById('verificationContainer').style.display = 'block';
-        }
-
-        function verifyCode() {
-            alert("Code verified!");
+        function submitForm() {
+            alert("Registration submitted!");
         }
     </script>
 </body>
