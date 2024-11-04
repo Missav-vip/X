@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futuristic Website 2100</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <title>Register - Futuristic Website 2100</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap">
     <style>
         /* Background and general styling */
         body {
@@ -17,7 +16,7 @@
             min-height: 100vh;
             background: url('https://raw.githubusercontent.com/Missav-vip/X/refs/heads/main/image/IMG_8350.jpeg') no-repeat center center fixed;
             background-size: cover;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Roboto', sans-serif;
             color: white;
             overflow: hidden; /* Prevent scrolling */
         }
@@ -33,7 +32,7 @@
             width: 90%;
             max-width: 350px;
             text-align: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(0); /* Set blur to 0% */
         }
 
         h2 {
@@ -92,29 +91,30 @@
 </head>
 <body>
     <div class="container">
-        <h2>Verifikasi Umur</h2>
-        <p>Mohon tunggu 1 menit sebelum Anda dapat melanjutkan.</p>
-        <div class="timer" id="waitingTimer">Waktu tersisa: 1:00</div>
-        <button id="ageConfirmBtn" onclick="showQuestion()" disabled>Konfirmasi 18+</button>
+        <h2>Age Verification</h2>
+        <p>Please wait 1 minute before you can continue.</p>
+        <div class="timer" id="waitingTimer">Time left: 1:00</div>
+        <button id="ageConfirmBtn" onclick="showQuestion()" disabled>18+ Confirm</button>
         
         <div id="questionContainer" style="display: none;">
-            <p id="questionText">Jawab pertanyaan untuk melanjutkan.</p>
-            <input type="text" id="answerInput" placeholder="Jawaban Anda di sini">
-            <button id="submitAnswerBtn" onclick="submitAnswer()">Kirim</button>
-            <div class="timer" id="questionTimer">Waktu tersisa: 3:00</div>
+            <p id="questionText">Answer the question to proceed.</p>
+            <input type="text" id="answerInput" placeholder="Your answer here">
+            <button id="submitAnswerBtn" onclick="submitAnswer()">Submit</button>
+            <div class="timer" id="questionTimer">Time left: 3:00</div>
         </div>
 
         <div id="registrationContainer" style="display: none;">
-            <h2>Form Pendaftaran</h2>
+            <h2>Registration Form</h2>
             <input type="email" id="email" placeholder="Email">
             <input type="password" id="password" placeholder="Password">
-            <button onclick="submitRegistration()">Daftar</button>
+            <button onclick="submitRegistration()">Register</button>
         </div>
 
         <div id="verificationContainer" style="display: none;">
-            <h2>Masukkan Kode Verifikasi</h2>
-            <input type="text" id="verificationCode" placeholder="Kode Verifikasi">
-            <button onclick="verifyCode()">Verifikasi</button>
+            <h2>Enter Verification Code</h2>
+            <input type="text" id="verificationCode" placeholder="Verification Code">
+            <button onclick="verifyCode()">Verify</button>
+            <button id="goToHomeBtn" style="display: none;" onclick="goToHome()">Go to Home</button> <!-- Tombol untuk masuk ke beranda -->
         </div>
     </div>
 
@@ -123,10 +123,11 @@
         let waitTime = 60;
         const ageConfirmBtn = document.getElementById('ageConfirmBtn');
         const waitingTimer = document.getElementById('waitingTimer');
+        const questionContainer = document.getElementById('questionContainer');
         
         const waitTimer = setInterval(() => {
             waitTime--;
-            waitingTimer.textContent = `Waktu tersisa: ${Math.floor(waitTime / 60)}:${(waitTime % 60).toString().padStart(2, '0')}`;
+            waitingTimer.textContent = `Time left: ${Math.floor(waitTime / 60)}:${(waitTime % 60).toString().padStart(2, '0')}`;
             if (waitTime <= 0) {
                 clearInterval(waitTimer);
                 ageConfirmBtn.disabled = false;
@@ -138,14 +139,12 @@
             { question: "Jika x + 5 = 12, berapa nilai x?", answer: "7" },
             { question: "Hitunglah nilai dari 2x - 3 = 5. Berapa nilai x?", answer: "4" }
         ];
-        let questionAttempts = 0;
         let correctAnswers = 0;
-        let questionTime = 180;
         let currentQuestion;
 
         function showQuestion() {
-            document.getElementById('questionContainer').style.display = 'block';
-            document.getElementById('ageConfirmBtn').style.display = 'none';
+            questionContainer.style.display = 'block';
+            ageConfirmBtn.style.display = 'none';
             setNewQuestion();
             startQuestionTimer();
         }
@@ -160,35 +159,49 @@
             const answer = document.getElementById('answerInput').value;
             if (answer === currentQuestion.answer) {
                 correctAnswers++;
-                if (correctAnswers >= 5) {
-                    clearInterval(questionTimer);
-                    questionContainer.style.display = 'none';
-                    document.getElementById('registrationContainer').style.display = 'block';
-                } else {
-                    setNewQuestion();
-                }
+                setNewQuestion(); // Set new question for the next attempt
             } else {
-                setNewQuestion();
+                alert("Jawaban salah, coba lagi.");
+                setNewQuestion(); // Set new question regardless of answer
+            }
+
+            if (correctAnswers >= 5) {
+                questionContainer.style.display = 'none';
+                document.getElementById('registrationContainer').style.display = 'block';
             }
         }
 
         // Timer setup for each question (3 minutes)
+        let questionTime = 180;
         const questionTimer = setInterval(() => {
             questionTime--;
-            document.getElementById('questionTimer').textContent = `Waktu tersisa: ${Math.floor(questionTime / 60)}:${(questionTime % 60).toString().padStart(2, '0')}`;
+            document.getElementById('questionTimer').textContent = `Time left: ${Math.floor(questionTime / 60)}:${(questionTime % 60).toString().padStart(2, '0')}`;
             if (questionTime <= 0) {
+                alert("Waktu habis, pertanyaan baru.");
                 questionTime = 180;
                 setNewQuestion();
             }
         }, 1000);
 
         function submitRegistration() {
-            document.getElementById('registrationContainer').style.display = 'none';
+            registrationContainer.style.display = 'none';
             document.getElementById('verificationContainer').style.display = 'block';
         }
 
         function verifyCode() {
-            alert("Kode telah diverifikasi!");
+            const verificationCode = document.getElementById('verificationCode').value;
+            if (verificationCode === "1234567") { // Ganti dengan kode verifikasi yang diinginkan
+                alert("Pendaftaran berhasil!");
+                document.getElementById('verificationContainer').style.display = 'none';
+                document.getElementById('goToHomeBtn').style.display = 'block'; // Tampilkan tombol untuk masuk ke beranda
+            } else {
+                alert("Kode verifikasi salah!");
+            }
+        }
+
+        // Fungsi untuk mengarahkan pengguna ke beranda
+        function goToHome() {
+            window.location.href = 'index.html'; // Ganti dengan nama file beranda Anda
         }
     </script>
 </body>
